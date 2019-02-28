@@ -16,6 +16,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 import android.util.Log;
+
+import retrofit2.Call;
+import retrofit2.Retrofit;
+import retrofit2.converter.jackson.JacksonConverterFactory;
+import retrofit2.http.GET;
+import retrofit2.http.Path;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -28,6 +35,7 @@ public class MainActivity extends AppCompatActivity
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_home:
+                    String call = new RetrofitConfig().getResumeService();
                     //mTextMessage.setText(R.string.title_home);
                     return true;
                 case R.id.navigation_dashboard:
@@ -114,5 +122,25 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+}
+interface ResumeService {
+
+    @GET("resume")
+    Call getResume();
+
+}
+class RetrofitConfig {
+    private final Retrofit retrofit;
+    public RetrofitConfig() {
+        this.retrofit = new Retrofit.Builder()
+                .baseUrl("https://2hm1e5siv9.execute-api.us-east-1.amazonaws.com/dev/")
+                .addConverterFactory(JacksonConverterFactory.create())
+                .build();
+    }
+    public String getResumeService() {
+        ResumeService resume =this.retrofit.create(ResumeService.class);
+
+        return "1";
     }
 }
