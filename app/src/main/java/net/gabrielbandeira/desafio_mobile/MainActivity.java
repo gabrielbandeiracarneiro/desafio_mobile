@@ -15,6 +15,7 @@ import android.util.Log;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,29 +41,29 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_home:
-
-                    apiInterface = APIClient.getClient().create(APIInterface.class);
-
                     /**
                      GET List Resources
                      **/
-                    Call<MultipleResource> call = apiInterface.doGetListResources();
-                    call.enqueue(new Callback<MultipleResource>() {
+                    Call<Resume> call = apiInterface.getResume();
+                    call.enqueue(new Callback<Resume>() {
                         @Override
-                        public void onResponse(Call<MultipleResource> call, Response<MultipleResource> response) {
+                        public void onResponse(Call<Resume> call, Response<Resume> response) {
 
 
                             Log.d("TAG",response.code()+"");
 
                             String displayResponse = "";
 
-                            MultipleResource resource = response.body();
+                            Resume resource = response.body();
                             TextView saldo = (TextView)findViewById(R.id.text_center);
-                            saldo.setText(resource.balance);
+                            NumberFormat formatter = NumberFormat.getCurrencyInstance();
+                            String moneyString = formatter.format(resource.balance);
+                            saldo.setText("Disponível R$ "+moneyString);
+
                         }
 
                         @Override
-                        public void onFailure(Call<MultipleResource> call, Throwable t) {
+                        public void onFailure(Call<Resume> call, Throwable t) {
                             call.cancel();
                         }
                     });
@@ -94,6 +95,34 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        apiInterface = APIClient.getClient().create(APIInterface.class);
+
+        /**
+         GET List Resources
+         **/
+        Call<Resume> call = apiInterface.getResume();
+        call.enqueue(new Callback<Resume>() {
+            @Override
+            public void onResponse(Call<Resume> call, Response<Resume> response) {
+
+
+                Log.d("TAG",response.code()+"");
+
+                String displayResponse = "";
+
+                Resume resource = response.body();
+                TextView saldo = (TextView)findViewById(R.id.profile_relative_layout_bio);
+                NumberFormat formatter = NumberFormat.getCurrencyInstance();
+                String moneyString = formatter.format(resource.balance);
+                saldo.setText("Gasto R$ 2.000,00\nDisponível "+moneyString);
+
+            }
+
+            @Override
+            public void onFailure(Call<Resume> call, Throwable t) {
+                call.cancel();
+            }
+        });
     }
 
     @Override
@@ -179,7 +208,7 @@ class APIClient {
 interface APIInterface {
 
     @GET("/dev/resume")
-    Call<MultipleResource> doGetListResources();
+    Call<Resume> getResume();
 
     @POST("/api/users")
     Call<User> createUser(@Body User user);
@@ -191,10 +220,10 @@ interface APIInterface {
     @POST("/api/users?")
     Call<UserList> doCreateUserWithField(@Field("name") String name, @Field("job") String job);
 }
-class MultipleResource {
+class Resume {
 
     @SerializedName("balance")
-    public String balance;
+    public Double balance;
 
 }
 class User {
@@ -226,7 +255,7 @@ class UserList {
     @SerializedName("total_pages")
     public Integer totalPages;
     @SerializedName("data")
-    public List<Datum> data = new ArrayList();
+    public List<Datum> data = new ArrayList<Datum>();
 
     public class Datum {
 
