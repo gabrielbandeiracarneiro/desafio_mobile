@@ -56,11 +56,18 @@
                     android:textColor="@color/ic_launcher_background" />
 
                 <TextView
-                    android:id="@+id/profile_relative_layout_bio"
+                    android:id="@+id/profile_relative_layout_gasto"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:text="Gasto R$ 2.000,00\nDisponível R$ carregando..."
+                    android:text="Gasto R$ Carregando..."
+                    android:textColor="@color/ic_launcher_background" />
+                <TextView
+                    android:id="@+id/profile_relative_layout_saldo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="Disponível R$ Carregando..."
                     android:textColor="@color/ic_launcher_background" />
 
             </LinearLayout>

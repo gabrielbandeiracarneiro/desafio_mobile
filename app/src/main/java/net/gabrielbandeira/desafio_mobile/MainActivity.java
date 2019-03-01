@@ -111,16 +111,44 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 String displayResponse = "";
 
                 Resume resource = response.body();
-                TextView saldo = (TextView)findViewById(R.id.profile_relative_layout_bio);
+                TextView saldo = (TextView)findViewById(R.id.profile_relative_layout_saldo);
                 NumberFormat formatter = NumberFormat.getCurrencyInstance();
                 String moneyString = formatter.format(resource.balance);
-                saldo.setText("Gasto R$ 2.000,00\nDisponível "+moneyString);
+                saldo.setText("Disponível "+moneyString);
 
             }
 
             @Override
             public void onFailure(Call<Resume> call, Throwable t) {
-                call.cancel();
+                TextView saldo = (TextView)findViewById(R.id.profile_relative_layout_saldo);
+                saldo.setText("Disponível Erro ao carregar saldo");
+            }
+        });
+        /**
+         GET List Resources
+         **/
+        Call<cardUsage> call1 = apiInterface.getGastos();
+        call1.enqueue(new Callback<cardUsage>() {
+            @Override
+            public void onResponse(Call<cardUsage> call, Response<cardUsage> response) {
+
+
+                Log.d("TAG",response.code()+"");
+
+                String displayResponse = "";
+
+                cardUsage resource = response.body();
+                /*TextView saldo = (TextView)findViewById(R.id.profile_relative_layout_gasto);
+                NumberFormat formatter = NumberFormat.getCurrencyInstance();
+                String moneyString = formatter.format(resource.balance);
+                saldo.setText("Disponível "+moneyString);*/
+
+            }
+
+            @Override
+            public void onFailure(Call<cardUsage> call1, Throwable t) {
+                /*TextView saldo = (TextView)findViewById(R.id.profile_relative_layout_saldo);
+                saldo.setText("Disponível Erro ao carregar saldo");*/
             }
         });
     }
@@ -210,15 +238,9 @@ interface APIInterface {
     @GET("/dev/resume")
     Call<Resume> getResume();
 
-    @POST("/api/users")
-    Call<User> createUser(@Body User user);
+    @GET("/dev/card-usage")
+    Call<cardUsage> getGastos();
 
-    @GET("/api/users?")
-    Call<UserList> doGetUserList(@Query("page") String page);
-
-    @FormUrlEncoded
-    @POST("/api/users?")
-    Call<UserList> doCreateUserWithField(@Field("name") String name, @Field("job") String job);
 }
 class Resume {
 
@@ -226,58 +248,9 @@ class Resume {
     public Double balance;
 
 }
-class User {
 
-    @SerializedName("name")
-    public String name;
-    @SerializedName("job")
-    public String job;
-    @SerializedName("id")
-    public String id;
-    @SerializedName("createdAt")
-    public String createdAt;
+class cardUsage {
 
-    public User(String name, String job) {
-        this.name = name;
-        this.job = job;
-    }
-
-
-}
-class UserList {
-
-    @SerializedName("page")
-    public Integer page;
-    @SerializedName("per_page")
-    public Integer perPage;
-    @SerializedName("total")
-    public Integer total;
-    @SerializedName("total_pages")
-    public Integer totalPages;
-    @SerializedName("data")
-    public List<Datum> data = new ArrayList<Datum>();
-
-    public class Datum {
-
-        @SerializedName("id")
-        public Integer id;
-        @SerializedName("first_name")
-        public String first_name;
-        @SerializedName("last_name")
-        public String last_name;
-        @SerializedName("avatar")
-        public String avatar;
-
-    }
-}
-class CreateUserResponse {
-
-    @SerializedName("name")
-    public String name;
-    @SerializedName("job")
-    public String job;
-    @SerializedName("id")
-    public String id;
-    @SerializedName("createdAt")
-    public String createdAt;
+    @SerializedName("balance")
+    public Double balance;
 }
