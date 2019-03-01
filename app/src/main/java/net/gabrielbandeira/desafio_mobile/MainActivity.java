@@ -3,49 +3,78 @@ package net.gabrielbandeira.desafio_mobile;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 import android.util.Log;
 
+import com.google.gson.annotations.SerializedName;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import okhttp3.OkHttpClient;
 import retrofit2.Call;
+import retrofit2.Callback;
 import retrofit2.Retrofit;
-import retrofit2.converter.jackson.JacksonConverterFactory;
+import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.http.Body;
+import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
-import retrofit2.http.Path;
+import retrofit2.http.POST;
+import retrofit2.http.Query;
+import okhttp3.logging.HttpLoggingInterceptor;
+import retrofit2.Response;
 
-public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
-
-    private TextView mTextMessage;
-
-    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
-            = new BottomNavigationView.OnNavigationItemSelectedListener() {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+    APIInterface apiInterface;
+    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_home:
-                    String call = new RetrofitConfig().getResumeService();
-                    //mTextMessage.setText(R.string.title_home);
+
+                    apiInterface = APIClient.getClient().create(APIInterface.class);
+
+                    /**
+                     GET List Resources
+                     **/
+                    Call<MultipleResource> call = apiInterface.doGetListResources();
+                    call.enqueue(new Callback<MultipleResource>() {
+                        @Override
+                        public void onResponse(Call<MultipleResource> call, Response<MultipleResource> response) {
+
+
+                            Log.d("TAG",response.code()+"");
+
+                            String displayResponse = "";
+
+                            MultipleResource resource = response.body();
+                            TextView saldo = (TextView)findViewById(R.id.text_center);
+                            saldo.setText(resource.balance);
+                        }
+
+                        @Override
+                        public void onFailure(Call<MultipleResource> call, Throwable t) {
+                            call.cancel();
+                        }
+                    });
                     return true;
                 case R.id.navigation_dashboard:
                     //mTextMessage.setText(R.string.title_home);
+
                     return true;
             }
             return false;
         }
     };
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -124,23 +153,102 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 }
-interface ResumeService {
+class APIClient {
 
-    @GET("resume")
-    Call getResume();
+    private static Retrofit retrofit = null;
+
+    static Retrofit getClient() {
+
+        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+        OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
+
+
+        retrofit = new Retrofit.Builder()
+                .baseUrl("https://2hm1e5siv9.execute-api.us-east-1.amazonaws.com")
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(client)
+                .build();
+
+
+
+        return retrofit;
+    }
 
 }
-class RetrofitConfig {
-    private final Retrofit retrofit;
-    public RetrofitConfig() {
-        this.retrofit = new Retrofit.Builder()
-                .baseUrl("https://2hm1e5siv9.execute-api.us-east-1.amazonaws.com/dev/")
-                .addConverterFactory(JacksonConverterFactory.create())
-                .build();
-    }
-    public String getResumeService() {
-        ResumeService resume =this.retrofit.create(ResumeService.class);
+interface APIInterface {
 
-        return "1";
+    @GET("/dev/resume")
+    Call<MultipleResource> doGetListResources();
+
+    @POST("/api/users")
+    Call<User> createUser(@Body User user);
+
+    @GET("/api/users?")
+    Call<UserList> doGetUserList(@Query("page") String page);
+
+    @FormUrlEncoded
+    @POST("/api/users?")
+    Call<UserList> doCreateUserWithField(@Field("name") String name, @Field("job") String job);
+}
+class MultipleResource {
+
+    @SerializedName("balance")
+    public String balance;
+
+}
+class User {
+
+    @SerializedName("name")
+    public String name;
+    @SerializedName("job")
+    public String job;
+    @SerializedName("id")
+    public String id;
+    @SerializedName("createdAt")
+    public String createdAt;
+
+    public User(String name, String job) {
+        this.name = name;
+        this.job = job;
     }
+
+
+}
+class UserList {
+
+    @SerializedName("page")
+    public Integer page;
+    @SerializedName("per_page")
+    public Integer perPage;
+    @SerializedName("total")
+    public Integer total;
+    @SerializedName("total_pages")
+    public Integer totalPages;
+    @SerializedName("data")
+    public List<Datum> data = new ArrayList();
+
+    public class Datum {
+
+        @SerializedName("id")
+        public Integer id;
+        @SerializedName("first_name")
+        public String first_name;
+        @SerializedName("last_name")
+        public String last_name;
+        @SerializedName("avatar")
+        public String avatar;
+
+    }
+}
+class CreateUserResponse {
+
+    @SerializedName("name")
+    public String name;
+    @SerializedName("job")
+    public String job;
+    @SerializedName("id")
+    public String id;
+    @SerializedName("createdAt")
+    public String createdAt;
 }
