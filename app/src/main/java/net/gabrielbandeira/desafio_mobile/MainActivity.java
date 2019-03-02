@@ -11,6 +11,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.util.Log;
 import android.widget.Toast;
@@ -50,13 +51,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            FrameLayout view_cartao = (FrameLayout)findViewById(R.id.view_cartao);
+            com.jjoe64.graphview.GraphView view_grafico = (com.jjoe64.graphview.GraphView)findViewById(R.id.graph);
             switch (item.getItemId()) {
                 case R.id.navigation_home:
-
+                    view_cartao.setVisibility(FrameLayout.VISIBLE);
+                    view_grafico.setVisibility(com.jjoe64.graphview.GraphView.GONE);
                     return true;
                 case R.id.navigation_dashboard:
-                    //mTextMessage.setText(R.string.title_home);
-
+                    view_cartao.setVisibility(FrameLayout.GONE);
+                    view_grafico.setVisibility(com.jjoe64.graphview.GraphView.VISIBLE);
                     return true;
             }
             return false;

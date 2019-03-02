@@ -16,10 +16,13 @@
             android:layout_width="match_parent"
             android:layout_height="200dip"
             android:id="@+id/graph" />
+
         <FrameLayout
+            android:id="@+id/view_cartao"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:visibility="invisible">
 
             <LinearLayout
                 android:layout_width="match_parent"
