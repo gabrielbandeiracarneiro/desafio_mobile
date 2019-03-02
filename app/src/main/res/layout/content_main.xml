@@ -11,96 +11,106 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal">
-
-        <LinearLayout
+        android:orientation="vertical">
+        <com.jjoe64.graphview.GraphView
             android:layout_width="match_parent"
-            android:layout_height="203dp"
-            android:layout_margin="8dp"
-            android:orientation="vertical">
+            android:layout_height="200dip"
+            android:id="@+id/graph" />
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
 
             <LinearLayout
-
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="203dp"
                 android:layout_margin="8dp"
                 android:background="@drawable/shape"
                 android:gravity="center"
                 android:orientation="vertical">
 
-                <ImageView
-                    android:id="@+id/profile_relative_layout_photo"
-                    android:layout_width="wrap_content"
-                    android:layout_height="100dp"
-                    android:layout_marginTop="-15dp"
-                    android:contentDescription="@string/mastercard"
-                    android:maxWidth="@android:dimen/app_icon_size"
-                    android:src="@drawable/master" />
-
-                <TextView
-                    android:id="@+id/numero_cartao"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="-15dp"
-                    android:text="@string/cartao_default"
-                    android:textColor="@color/colorTextCard" />
-
                 <LinearLayout
+
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
-                    android:orientation="horizontal">
+                    android:layout_height="match_parent"
+                    android:layout_margin="8dp"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:id="@+id/profile_relative_layout_photo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="100dp"
+                        android:layout_marginTop="-15dp"
+                        android:contentDescription="@string/mastercard"
+                        android:maxWidth="@android:dimen/app_icon_size"
+                        android:src="@drawable/master" />
 
                     <TextView
-                        android:id="@+id/profile_relative_layout_saldo2"
+                        android:id="@+id/numero_cartao"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:layout_weight="1"
-                        android:text="Gasto"
+                        android:layout_marginTop="-15dp"
+                        android:text="@string/cartao_default"
                         android:textColor="@color/colorTextCard" />
 
-                    <TextView
-                        android:id="@+id/profile_relative_layout_gasto"
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:gravity="right"
-                        android:text="R$ Carregando..."
-                        android:textColor="@color/ic_launcher_background" />
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="20dp"
+                        android:orientation="horizontal">
 
+                        <TextView
+                            android:id="@+id/profile_relative_layout_saldo2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:layout_weight="1"
+                            android:text="Gasto"
+                            android:textColor="@color/colorTextCard" />
+
+                        <TextView
+                            android:id="@+id/profile_relative_layout_gasto"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:gravity="right"
+                            android:text="R$ Carregando..."
+                            android:textColor="@color/ic_launcher_background" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="20dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/profile_relative_layout_gasto2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:layout_weight="1"
+                            android:text="Disponível"
+                            android:textColor="@color/colorTextCard" />
+
+                        <TextView
+                            android:id="@+id/profile_relative_layout_saldo"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:gravity="right"
+                            android:text="R$ Carregando..."
+                            android:textColor="@color/ic_launcher_background" />
+                    </LinearLayout>
                 </LinearLayout>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/profile_relative_layout_gasto2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:layout_weight="1"
-                        android:text="Disponível"
-                        android:textColor="@color/colorTextCard" />
-
-                    <TextView
-                        android:id="@+id/profile_relative_layout_saldo"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:gravity="right"
-                        android:text="R$ Carregando..."
-                        android:textColor="@color/ic_launcher_background" />
-                </LinearLayout>
             </LinearLayout>
 
-        </LinearLayout>
-
+        </FrameLayout>
     </LinearLayout>
 
     <android.support.design.widget.BottomNavigationView

@@ -1,5 +1,6 @@
 package net.gabrielbandeira.desafio_mobile;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -12,8 +13,18 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.TextView;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.gson.annotations.SerializedName;
+import com.jjoe64.graphview.DefaultLabelFormatter;
+import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.GridLabelRenderer;
+import com.jjoe64.graphview.ValueDependentColor;
+import com.jjoe64.graphview.series.BarGraphSeries;
+import com.jjoe64.graphview.series.DataPoint;
+import com.jjoe64.graphview.series.DataPointInterface;
+import com.jjoe64.graphview.series.OnDataPointTapListener;
+import com.jjoe64.graphview.series.Series;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -112,10 +123,58 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                 List<CardUsage> resource = response.body();
                 Double valorGasto = 0.0;
+
+                int index = 0;
+                DataPoint[] dadosGrafico= new DataPoint[resource.size()];
                 for(CardUsage gasto: resource){
                     valorGasto += gasto.value;
+                    dadosGrafico[index++]=new DataPoint(Double.parseDouble(gasto.month), gasto.value);
                 }
+                GraphView graph = (GraphView) findViewById(R.id.graph);
+                BarGraphSeries<DataPoint> series = new BarGraphSeries<>(dadosGrafico);
+                graph.addSeries(series);
 
+// styling
+                series.setValueDependentColor(new ValueDependentColor<DataPoint>() {
+                    @Override
+                    public int get(DataPoint data) {
+                        return Color.rgb((int) data.getX()*255/4, (int) Math.abs(data.getY()*255/6), 100);
+                    }
+                });
+
+                series.setSpacing(15);
+
+// draw values on top
+                series.setDrawValuesOnTop(false);
+                series.setValuesOnTopColor(Color.RED);
+                series.setOnDataPointTapListener(new OnDataPointTapListener() {
+                    @Override
+                    public void onTap(Series series, DataPointInterface dataPoint) {
+                        NumberFormat formatter = NumberFormat.getCurrencyInstance();
+                        String moneyString = formatter.format(dataPoint.getY());
+                        Toast.makeText(getBaseContext(), "Mês: "+dataPoint.getX()+", Valor: "+moneyString, Toast.LENGTH_SHORT).show();
+                    }
+                });
+                graph.getGridLabelRenderer().setGridStyle( GridLabelRenderer.GridStyle.HORIZONTAL );
+                graph.getViewport().setScrollable(true); // enables horizontal scrolling
+                graph.getViewport().setScrollableY(true); // enables vertical scrolling
+                graph.getViewport().setScalable(true); // enables horizontal zooming and scrolling
+                graph.getViewport().setScalableY(true); // enables vertical zooming and scrolling
+//series.setValuesOnTopSize(50);
+                graph.getGridLabelRenderer().setLabelFormatter(new DefaultLabelFormatter() {
+                    @Override
+                    public String formatLabel(double value, boolean isValueX) {
+                        if (isValueX) {
+                            // show normal x values
+                            return super.formatLabel(value, isValueX);
+                        } else {
+                            // show currency for y values
+                            NumberFormat formatter = NumberFormat.getCurrencyInstance();
+                            String moneyString = formatter.format(value);
+                            return moneyString;
+                        }
+                    }
+                });
                 TextView gasto = (TextView)findViewById(R.id.profile_relative_layout_gasto);
                 NumberFormat formatter = NumberFormat.getCurrencyInstance();
                 String moneyString = formatter.format(valorGasto);
@@ -155,6 +214,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Log.d("TAG-ERRO",t.getMessage()+"");
             }
         });
+
     }
 
     @Override
