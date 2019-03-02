@@ -1,4 +1,4 @@
-package net.gabrielbandeira.desafio_mobile;
+package com.gabrielbandeira.desafio_mobile;
 
 import android.graphics.Color;
 import android.os.Bundle;
@@ -219,6 +219,34 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
+        /**
+         GET List Resources
+         **/
+        Call<cardStatement> call3 = apiInterface.getCardStatement(9,2018,1);
+        call3.enqueue(new Callback<cardStatement>() {
+            @Override
+            public void onResponse(Call<cardStatement> call, Response<cardStatement> response) {
+
+
+                Log.d("TAG",response.code()+"");
+                Log.d("TAG",response.body()+"");
+                String displayResponse = "";
+
+                cardStatement resource = response.body();
+                /*TextView saldo = (TextView)findViewById(R.id.profile_relative_layout_saldo);
+                NumberFormat formatter = NumberFormat.getCurrencyInstance();
+                String moneyString = formatter.format(resource.balance);
+                saldo.setText(moneyString);*/
+
+            }
+
+            @Override
+            public void onFailure(Call<cardStatement> call, Throwable t) {
+                TextView saldo = (TextView)findViewById(R.id.profile_relative_layout_saldo);
+                saldo.setText("Disponível Erro ao carregar saldo");
+            }
+        });
+
     }
 
     @Override
@@ -312,6 +340,9 @@ interface APIInterface {
     @GET("/dev/users/profile")
     Call<Profile> getProfile();
 
+    @GET("/dev/card-statement?")
+    Call<cardStatement> getCardStatement(@Query("month") int month,@Query("year") int year,@Query("page") int page);
+
 }
 class Resume {
 
@@ -339,5 +370,22 @@ class Profile {
     public String cardNumber;
     @SerializedName("expirationDate")
     public String expirationDate;
+
+}
+class cardStatement {
+
+    @SerializedName("purchases")
+    public List<Compras> purchases = null;
+
+    public class Compras{
+        @SerializedName("date")
+        public String date;
+        @SerializedName("store")
+        public String store;
+        @SerializedName("description")
+        public String description;
+        @SerializedName("value")
+        public Double value;
+    }
 
 }

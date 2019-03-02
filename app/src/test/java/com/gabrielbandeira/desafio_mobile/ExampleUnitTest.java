@@ -1,4 +1,4 @@
-package net.gabrielbandeira.desafio_mobile;
+package com.gabrielbandeira.desafio_mobile;
 
 import org.junit.Test;
 

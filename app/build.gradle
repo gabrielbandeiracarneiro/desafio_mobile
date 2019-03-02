@@ -3,7 +3,7 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 28
     defaultConfig {
-        applicationId "net.gabrielbandeira.desafio_mobile"
+        applicationId 'com.gabrielbandeira.desafio_mobile'
         minSdkVersion 15
         targetSdkVersion 28
         versionCode 1
@@ -19,13 +19,15 @@ android {
     packagingOptions {
         exclude 'META-INF/proguard/androidx-annotations.pro'
     }
+    buildToolsVersion '28.0.3'
+    productFlavors {
+    }
 }
 repositories {
     maven { url 'https://jitpack.io' }
 }
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'com.android.support:appcompat-v7:28.0.0'
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.android.support:design:28.0.0'
     implementation 'com.android.support.constraint:constraint-layout:1.1.3'
     testImplementation 'junit:junit:4.12'
