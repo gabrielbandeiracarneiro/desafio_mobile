@@ -41,32 +41,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_home:
-                    /**
-                     GET List Resources
-                     **/
-                    Call<Resume> call = apiInterface.getResume();
-                    call.enqueue(new Callback<Resume>() {
-                        @Override
-                        public void onResponse(Call<Resume> call, Response<Resume> response) {
 
-
-                            Log.d("TAG",response.code()+"");
-
-                            String displayResponse = "";
-
-                            Resume resource = response.body();
-                            TextView saldo = (TextView)findViewById(R.id.text_center);
-                            NumberFormat formatter = NumberFormat.getCurrencyInstance();
-                            String moneyString = formatter.format(resource.balance);
-                            saldo.setText("Disponível R$ "+moneyString);
-
-                        }
-
-                        @Override
-                        public void onFailure(Call<Resume> call, Throwable t) {
-                            call.cancel();
-                        }
-                    });
                     return true;
                 case R.id.navigation_dashboard:
                     //mTextMessage.setText(R.string.title_home);
@@ -114,7 +89,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 TextView saldo = (TextView)findViewById(R.id.profile_relative_layout_saldo);
                 NumberFormat formatter = NumberFormat.getCurrencyInstance();
                 String moneyString = formatter.format(resource.balance);
-                saldo.setText("Disponível "+moneyString);
+                saldo.setText(moneyString);
 
             }
 
@@ -127,28 +102,57 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         /**
          GET List Resources
          **/
-        Call<cardUsage> call1 = apiInterface.getGastos();
-        call1.enqueue(new Callback<cardUsage>() {
+        Call<List<CardUsage>> call1 = apiInterface.getGastos();
+        call1.enqueue(new Callback<List<CardUsage>>() {
             @Override
-            public void onResponse(Call<cardUsage> call, Response<cardUsage> response) {
+            public void onResponse(Call<List<CardUsage>> call, Response<List<CardUsage>> response) {
 
 
                 Log.d("TAG",response.code()+"");
 
-                String displayResponse = "";
+                List<CardUsage> resource = response.body();
+                Double valorGasto = 0.0;
+                for(CardUsage gasto: resource){
+                    valorGasto += gasto.value;
+                }
 
-                cardUsage resource = response.body();
-                /*TextView saldo = (TextView)findViewById(R.id.profile_relative_layout_gasto);
+                TextView gasto = (TextView)findViewById(R.id.profile_relative_layout_gasto);
                 NumberFormat formatter = NumberFormat.getCurrencyInstance();
-                String moneyString = formatter.format(resource.balance);
-                saldo.setText("Disponível "+moneyString);*/
+                String moneyString = formatter.format(valorGasto);
+                gasto.setText(moneyString);
 
             }
 
             @Override
-            public void onFailure(Call<cardUsage> call1, Throwable t) {
+            public void onFailure(Call<List<CardUsage>> call, Throwable t) {
+                Log.d("TAG-ERRO",t.getMessage()+"");
                 /*TextView saldo = (TextView)findViewById(R.id.profile_relative_layout_saldo);
                 saldo.setText("Disponível Erro ao carregar saldo");*/
+            }
+        });
+
+        /**
+         GET List Resources
+         **/
+        Call<Profile> call2 = apiInterface.getProfile();
+        call2.enqueue(new Callback<Profile>() {
+            @Override
+            public void onResponse(Call<Profile> call, Response<Profile> response) {
+
+
+                Log.d("TAG",response.code()+"");
+
+                Profile resource = response.body();
+
+
+                TextView gasto = (TextView)findViewById(R.id.numero_cartao);
+                gasto.setText("XXXX XXXX XXXX "+resource.cardNumber.substring(12,16));
+
+            }
+
+            @Override
+            public void onFailure(Call<Profile> call, Throwable t) {
+                Log.d("TAG-ERRO",t.getMessage()+"");
             }
         });
     }
@@ -239,7 +243,10 @@ interface APIInterface {
     Call<Resume> getResume();
 
     @GET("/dev/card-usage")
-    Call<cardUsage> getGastos();
+    Call<List<CardUsage>> getGastos();
+
+    @GET("/dev/users/profile")
+    Call<Profile> getProfile();
 
 }
 class Resume {
@@ -249,8 +256,24 @@ class Resume {
 
 }
 
-class cardUsage {
+class CardUsage {
 
-    @SerializedName("balance")
-    public Double balance;
+    @SerializedName("month")
+    public String month;
+    @SerializedName("name")
+    public String name;
+    @SerializedName("value")
+    public Double value;
+
+}
+
+class Profile {
+
+    @SerializedName("name")
+    public String name;
+    @SerializedName("cardNumber")
+    public String cardNumber;
+    @SerializedName("expirationDate")
+    public String expirationDate;
+
 }

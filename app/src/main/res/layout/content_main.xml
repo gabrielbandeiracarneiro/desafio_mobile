@@ -8,24 +8,14 @@
     tools:context=".MainActivity"
     tools:showIn="@layout/app_bar_main">
 
-    <TextView
-        android:id="@+id/text_center"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="203dp"
             android:layout_margin="8dp"
             android:orientation="vertical">
 
@@ -42,38 +32,77 @@
                     android:id="@+id/profile_relative_layout_photo"
                     android:layout_width="wrap_content"
                     android:layout_height="100dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="-15dp"
+                    android:contentDescription="@string/mastercard"
                     android:maxWidth="@android:dimen/app_icon_size"
                     android:src="@drawable/master" />
 
                 <TextView
-                    android:id="@+id/profile_relative_layout_name"
+                    android:id="@+id/numero_cartao"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignLeft="@id/profile_relative_layout_photo"
-                    android:text="xxxx xxxx xxxx 1875"
-                    android:textColor="@color/ic_launcher_background" />
+                    android:layout_marginTop="-15dp"
+                    android:text="@string/cartao_default"
+                    android:textColor="@color/colorTextCard" />
 
-                <TextView
-                    android:id="@+id/profile_relative_layout_gasto"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:text="Gasto R$ Carregando..."
-                    android:textColor="@color/ic_launcher_background" />
-                <TextView
-                    android:id="@+id/profile_relative_layout_saldo"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:text="Disponível R$ Carregando..."
-                    android:textColor="@color/ic_launcher_background" />
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:orientation="horizontal">
 
+                    <TextView
+                        android:id="@+id/profile_relative_layout_saldo2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:layout_weight="1"
+                        android:text="Gasto"
+                        android:textColor="@color/colorTextCard" />
+
+                    <TextView
+                        android:id="@+id/profile_relative_layout_gasto"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:gravity="right"
+                        android:text="R$ Carregando..."
+                        android:textColor="@color/ic_launcher_background" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/profile_relative_layout_gasto2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:layout_weight="1"
+                        android:text="Disponível"
+                        android:textColor="@color/colorTextCard" />
+
+                    <TextView
+                        android:id="@+id/profile_relative_layout_saldo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:gravity="right"
+                        android:text="R$ Carregando..."
+                        android:textColor="@color/ic_launcher_background" />
+                </LinearLayout>
             </LinearLayout>
 
         </LinearLayout>
+
     </LinearLayout>
+
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/navigation"
         android:layout_width="0dp"
