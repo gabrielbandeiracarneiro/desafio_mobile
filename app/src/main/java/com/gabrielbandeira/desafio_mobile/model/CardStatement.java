@@ -9,6 +9,9 @@ public class CardStatement {
     @SerializedName("purchases")
     private List<Compras> purchases = null;
 
+    @SerializedName("lastPage")
+    private int lastPage;
+
     public List<Compras> getPurchases() {
         return purchases;
     }
@@ -17,6 +20,13 @@ public class CardStatement {
         this.purchases = purchases;
     }
 
+    public int getLastPage() {
+        return lastPage;
+    }
+
+    public void setLastPage(int lastPage) {
+        this.lastPage = lastPage;
+    }
     @Override
     public String toString() {
         return "{" +

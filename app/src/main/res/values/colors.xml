@@ -5,4 +5,6 @@
     <color name="colorAccent">#FF4081</color>
     <color name="colorCard">#FF4081</color>
     <color name="colorTextCard">#797886</color>
+    <color name="colorExtrato">#64EBEBEB</color>
+    <color name="colorBarra">#FF7141</color>
 </resources>

@@ -1,5 +1,7 @@
 package com.gabrielbandeira.desafio_mobile.presenter;
 
+import android.widget.Toast;
+
 import com.gabrielbandeira.desafio_mobile.view.MainActivity;
 import com.gabrielbandeira.desafio_mobile.model.CardStatement;
 import com.gabrielbandeira.desafio_mobile.model.CardUsage;
@@ -40,6 +42,8 @@ public class APIPresenter {
 
                 @Override
                 public void onFailure(Call<CardStatement> call, Throwable t) {
+                    Toast.makeText(mainView.getBaseContext(), "Falha ao carregar extrato", Toast.LENGTH_SHORT).show();
+
                     try {
                         throw new InterruptedException("Something went wrong!");
                     } catch (InterruptedException e) {
@@ -65,6 +69,8 @@ public class APIPresenter {
 
                     @Override
                     public void onFailure(Call<List<CardUsage>> call, Throwable t) {
+
+                        Toast.makeText(mainView.getBaseContext(), "Falha ao carregar dados do gráfico", Toast.LENGTH_SHORT).show();
                         try {
                             throw new InterruptedException("Something went wrong!");
                         } catch (InterruptedException e) {
@@ -90,6 +96,8 @@ public class APIPresenter {
 
                     @Override
                     public void onFailure(Call<Profile> call, Throwable t) {
+                        Toast.makeText(mainView.getBaseContext(), "Falha ao carregar dados do cartão", Toast.LENGTH_SHORT).show();
+
                         try {
                             throw new InterruptedException("Something went wrong!");
                         } catch (InterruptedException e) {
@@ -115,6 +123,7 @@ public class APIPresenter {
 
                     @Override
                     public void onFailure(Call<Resume> call, Throwable t) {
+                        Toast.makeText(mainView.getBaseContext(), "Falha ao carregar saldo", Toast.LENGTH_SHORT).show();
                         try {
                             throw new InterruptedException("Something went wrong!");
                         } catch (InterruptedException e) {
