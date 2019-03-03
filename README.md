@@ -23,3 +23,10 @@ A aplicação foi feita no Android Stuido, utilizando o Retrofit para fazer as r
 ## Contato
 
 Email: gabrielbandeiracarneiro@gmail.com
+
+### Prints de telas
+  
+![alt text](prints/icon_app.png)
+![alt text](prints/primeira_tela.png)
+![alt text](prints/segunda_tela.png)
+![alt text](prints/segunda_tela_demo.png)
